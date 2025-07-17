@@ -2,4 +2,5 @@
 .vscode
 *.orig
 *.patch
+10_enable_susfs_for_ksu.patch
 *.rej

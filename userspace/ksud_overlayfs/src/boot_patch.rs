@@ -327,17 +327,16 @@ pub fn restore(
         .join("vendor_ramdisk")
         .join("init_boot.cpio")
         .exists();
-    let no_vendor_ramdisk = !workdir
-        .join("vendor_ramdisk")
-        .join("ramdisk.cpio")
-        .exists();
+    let no_vendor_ramdisk = !workdir.join("vendor_ramdisk").join("ramdisk.cpio").exists();
     let is_kernelsu_patched = is_kernelsu_patched(&magiskboot, workdir)?;
     let is_kernelsu_patched_vendor_init_boot =
         is_kernelsu_patched_vendor_init_boot(&magiskboot, workdir)?;
     let is_kernelsu_patched_vendor_ramdisk =
         is_kernelsu_patched_vendor_ramdisk(&magiskboot, workdir)?;
     ensure!(
-        is_kernelsu_patched || is_kernelsu_patched_vendor_init_boot || is_kernelsu_patched_vendor_ramdisk,
+        is_kernelsu_patched
+            || is_kernelsu_patched_vendor_init_boot
+            || is_kernelsu_patched_vendor_ramdisk,
         "boot image is not patched by KernelSU Next"
     );
 
@@ -349,7 +348,7 @@ pub fn restore(
         do_cpio_cmd(
             &magiskboot,
             workdir,
-            &format!("extract {0} {0}", BACKUP_FILENAME),
+            &format!("extract {BACKUP_FILENAME} {BACKUP_FILENAME}"),
         )?;
         let sha = std::fs::read(workdir.join(BACKUP_FILENAME))?;
         let sha = String::from_utf8(sha)?;
@@ -483,8 +482,6 @@ fn do_patch(
     magiskboot_path: Option<PathBuf>,
     kmi: Option<String>,
 ) -> Result<()> {
-    println!(include_str!("banner"));
-
     let patch_file = image.is_some();
 
     #[cfg(target_os = "android")]
@@ -516,7 +513,7 @@ fn do_patch(
         match get_current_kmi() {
             Ok(value) => value,
             Err(e) => {
-                println!("- {}", e);
+                println!("- {e}");
                 if let Some(image_path) = &image {
                     println!(
                         "- Trying to auto detect KMI version for {}",
@@ -585,20 +582,18 @@ fn do_patch(
         .join("vendor_ramdisk")
         .join("init_boot.cpio")
         .exists();
-    let no_vendor_ramdisk = !workdir
-        .join("vendor_ramdisk")
-        .join("ramdisk.cpio")
-        .exists();
+    let no_vendor_ramdisk = !workdir.join("vendor_ramdisk").join("ramdisk.cpio").exists();
     if no_ramdisk && no_vendor_init_boot && no_vendor_ramdisk {
         bail!("No compatible ramdisk found.");
     }
     let is_magisk_patched = is_magisk_patched(&magiskboot, workdir)?;
     let is_magisk_patched_vendor_init_boot =
         is_magisk_patched_vendor_init_boot(&magiskboot, workdir)?;
-    let is_magisk_patched_vendor_ramdisk =
-        is_magisk_patched_vendor_ramdisk(&magiskboot, workdir)?;
+    let is_magisk_patched_vendor_ramdisk = is_magisk_patched_vendor_ramdisk(&magiskboot, workdir)?;
     ensure!(
-        !is_magisk_patched || !is_magisk_patched_vendor_init_boot || !is_magisk_patched_vendor_ramdisk,
+        !is_magisk_patched
+            || !is_magisk_patched_vendor_init_boot
+            || !is_magisk_patched_vendor_ramdisk,
         "Cannot work with Magisk patched image"
     );
 
@@ -610,7 +605,9 @@ fn do_patch(
         is_kernelsu_patched_vendor_ramdisk(&magiskboot, workdir)?;
 
     let mut need_backup = false;
-    if !is_kernelsu_patched || (no_ramdisk && !is_kernelsu_patched_vendor_init_boot) || (no_ramdisk && no_vendor_init_boot && !is_kernelsu_patched_vendor_ramdisk) 
+    if !is_kernelsu_patched
+        || (no_ramdisk && !is_kernelsu_patched_vendor_init_boot)
+        || (no_ramdisk && no_vendor_init_boot && !is_kernelsu_patched_vendor_ramdisk)
     {
         if no_ramdisk {
             if !no_vendor_init_boot {
@@ -714,7 +711,7 @@ fn calculate_sha1(file_path: impl AsRef<Path>) -> Result<String> {
     }
 
     let result = hasher.finalize();
-    Ok(format!("{:x}", result))
+    Ok(format!("{result:x}"))
 }
 
 #[cfg(target_os = "android")]
@@ -730,7 +727,7 @@ fn do_backup(magiskboot: &Path, workdir: &Path, image: &str) -> Result<()> {
     do_cpio_cmd(
         magiskboot,
         workdir,
-        &format!("add 0755 {0} {0}", BACKUP_FILENAME),
+        &format!("add 0755 {BACKUP_FILENAME} {BACKUP_FILENAME}"),
     )?;
     println!("- Stock image has been backup to");
     println!("- {target}");
@@ -740,7 +737,7 @@ fn do_backup(magiskboot: &Path, workdir: &Path, image: &str) -> Result<()> {
 #[cfg(target_os = "android")]
 fn clean_backup(sha1: &str) -> Result<()> {
     println!("- Clean up backup");
-    let backup_name = format!("{}{}", KSU_BACKUP_FILE_PREFIX, sha1);
+    let backup_name = format!("{KSU_BACKUP_FILE_PREFIX}{sha1}");
     let dir = std::fs::read_dir(defs::KSU_BACKUP_DIR)?;
     for entry in dir.flatten() {
         let path = entry.path();

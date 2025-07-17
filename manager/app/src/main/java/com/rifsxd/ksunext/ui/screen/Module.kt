@@ -150,6 +150,10 @@ fun ModuleScreen(navigator: DestinationsNavigator) {
         viewModel.sortZToA = prefs.getBoolean("module_sort_z_to_a", false)
         viewModel.sortSizeLowToHigh = prefs.getBoolean("module_sort_size_low_to_high", false)
         viewModel.sortSizeHighToLow = prefs.getBoolean("module_sort_size_high_to_low", false)
+        viewModel.sortEnabledFirst = prefs.getBoolean("module_sort_enabled_first", false)
+        viewModel.sortActionFirst = prefs.getBoolean("module_sort_action_first", false)
+        viewModel.sortWebUiFirst = prefs.getBoolean("module_sort_webui_first", false)
+        
         if (viewModel.moduleList.isEmpty() || viewModel.isNeedRefresh) {
             viewModel.fetchModuleList()
         }
@@ -233,11 +237,17 @@ fun ModuleScreen(navigator: DestinationsNavigator) {
                                     viewModel.sortZToA = false
                                     viewModel.sortSizeLowToHigh = false
                                     viewModel.sortSizeHighToLow = false
+                                    viewModel.sortEnabledFirst = false
+                                    viewModel.sortActionFirst = false
+                                    viewModel.sortWebUiFirst = false
                                     prefs.edit()
                                         .putBoolean("module_sort_a_to_z", viewModel.sortAToZ)
                                         .putBoolean("module_sort_z_to_a", false)
                                         .putBoolean("module_sort_size_low_to_high", false)
                                         .putBoolean("module_sort_size_high_to_low", false)
+                                        .putBoolean("module_sort_enabled_first", false)
+                                        .putBoolean("module_sort_action_first", false)
+                                        .putBoolean("module_sort_webui_first", false)
                                         .apply()
                                     scope.launch {
                                         viewModel.fetchModuleList()
@@ -257,11 +267,17 @@ fun ModuleScreen(navigator: DestinationsNavigator) {
                                     viewModel.sortAToZ = false
                                     viewModel.sortSizeLowToHigh = false
                                     viewModel.sortSizeHighToLow = false
+                                    viewModel.sortEnabledFirst = false
+                                    viewModel.sortActionFirst = false
+                                    viewModel.sortWebUiFirst = false
                                     prefs.edit()
                                         .putBoolean("module_sort_z_to_a", viewModel.sortZToA)
                                         .putBoolean("module_sort_a_to_z", false)
                                         .putBoolean("module_sort_size_low_to_high", false)
                                         .putBoolean("module_sort_size_high_to_low", false)
+                                        .putBoolean("module_sort_enabled_first", false)
+                                        .putBoolean("module_sort_action_first", false)
+                                        .putBoolean("module_sort_webui_first", false)
                                         .apply()
                                     scope.launch {
                                         viewModel.fetchModuleList()
@@ -281,11 +297,17 @@ fun ModuleScreen(navigator: DestinationsNavigator) {
                                     viewModel.sortAToZ = false
                                     viewModel.sortZToA = false
                                     viewModel.sortSizeHighToLow = false
+                                    viewModel.sortEnabledFirst = false
+                                    viewModel.sortActionFirst = false
+                                    viewModel.sortWebUiFirst = false
                                     prefs.edit()
                                         .putBoolean("module_sort_size_low_to_high", viewModel.sortSizeLowToHigh)
                                         .putBoolean("module_sort_a_to_z", false)
                                         .putBoolean("module_sort_z_to_a", false)
                                         .putBoolean("module_sort_size_high_to_low", false)
+                                        .putBoolean("module_sort_enabled_first", false)
+                                        .putBoolean("module_sort_action_first", false)
+                                        .putBoolean("module_sort_webui_first", false)
                                         .apply()
                                     scope.launch {
                                         viewModel.fetchModuleList()
@@ -305,11 +327,104 @@ fun ModuleScreen(navigator: DestinationsNavigator) {
                                     viewModel.sortAToZ = false
                                     viewModel.sortZToA = false
                                     viewModel.sortSizeLowToHigh = false
+                                    viewModel.sortEnabledFirst = false
+                                    viewModel.sortActionFirst = false
+                                    viewModel.sortWebUiFirst = false
                                     prefs.edit()
                                         .putBoolean("module_sort_size_high_to_low", viewModel.sortSizeHighToLow)
                                         .putBoolean("module_sort_a_to_z", false)
                                         .putBoolean("module_sort_z_to_a", false)
                                         .putBoolean("module_sort_size_low_to_high", false)
+                                        .putBoolean("module_sort_enabled_first", false)
+                                        .putBoolean("module_sort_action_first", false)
+                                        .putBoolean("module_sort_webui_first", false)
+                                        .apply()
+                                    scope.launch {
+                                        viewModel.fetchModuleList()
+                                    }
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = {
+                                    Text(stringResource(R.string.module_sort_enabled_first))
+                                },
+                                trailingIcon = {
+                                    Checkbox(checked = viewModel.sortEnabledFirst, onCheckedChange = null)
+                                },
+                                onClick = {
+                                    viewModel.sortEnabledFirst = !viewModel.sortEnabledFirst
+                                    viewModel.sortAToZ = false
+                                    viewModel.sortZToA = false
+                                    viewModel.sortSizeLowToHigh = false
+                                    viewModel.sortSizeHighToLow = false
+                                    viewModel.sortActionFirst = false
+                                    viewModel.sortWebUiFirst = false
+                                    prefs.edit()
+                                        .putBoolean("module_sort_enabled_first", viewModel.sortEnabledFirst)
+                                        .putBoolean("module_sort_a_to_z", false)
+                                        .putBoolean("module_sort_z_to_a", false)
+                                        .putBoolean("module_sort_size_low_to_high", false)
+                                        .putBoolean("module_sort_size_high_to_low", false)
+                                        .putBoolean("module_sort_action_first", false)
+                                        .putBoolean("module_sort_webui_first", false)
+                                        .apply()
+                                    scope.launch {
+                                        viewModel.fetchModuleList()
+                                    }
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = {
+                                    Text(stringResource(R.string.module_sort_action_first))
+                                },
+                                trailingIcon = {
+                                    Checkbox(checked = viewModel.sortActionFirst, onCheckedChange = null)
+                                },
+                                onClick = {
+                                    viewModel.sortActionFirst = !viewModel.sortActionFirst
+                                    viewModel.sortAToZ = false
+                                    viewModel.sortZToA = false
+                                    viewModel.sortSizeLowToHigh = false
+                                    viewModel.sortSizeHighToLow = false
+                                    viewModel.sortEnabledFirst = false
+                                    viewModel.sortWebUiFirst = false
+                                    prefs.edit()
+                                        .putBoolean("module_sort_action_first", viewModel.sortActionFirst)
+                                        .putBoolean("module_sort_a_to_z", false)
+                                        .putBoolean("module_sort_z_to_a", false)
+                                        .putBoolean("module_sort_size_low_to_high", false)
+                                        .putBoolean("module_sort_size_high_to_low", false)
+                                        .putBoolean("module_sort_enabled_first", false)
+                                        .putBoolean("module_sort_webui_first", false)
+                                        .apply()
+                                    scope.launch {
+                                        viewModel.fetchModuleList()
+                                    }
+                                }
+                            )
+                            DropdownMenuItem(
+                                text = {
+                                    Text(stringResource(R.string.module_sort_webui_first))
+                                },
+                                trailingIcon = {
+                                    Checkbox(checked = viewModel.sortWebUiFirst, onCheckedChange = null)
+                                },
+                                onClick = {
+                                    viewModel.sortWebUiFirst = !viewModel.sortWebUiFirst
+                                    viewModel.sortAToZ = false
+                                    viewModel.sortZToA = false
+                                    viewModel.sortSizeLowToHigh = false
+                                    viewModel.sortSizeHighToLow = false
+                                    viewModel.sortEnabledFirst = false
+                                    viewModel.sortActionFirst = false
+                                    prefs.edit()
+                                        .putBoolean("module_sort_webui_first", viewModel.sortWebUiFirst)
+                                        .putBoolean("module_sort_a_to_z", false)
+                                        .putBoolean("module_sort_z_to_a", false)
+                                        .putBoolean("module_sort_size_low_to_high", false)
+                                        .putBoolean("module_sort_size_high_to_low", false)
+                                        .putBoolean("module_sort_enabled_first", false)
+                                        .putBoolean("module_sort_action_first", false)
                                         .apply()
                                     scope.launch {
                                         viewModel.fetchModuleList()

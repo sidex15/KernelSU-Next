@@ -1,5 +1,6 @@
 package com.rifsxd.ksunext.ui.screen
 
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.os.Environment
@@ -67,6 +68,9 @@ import com.rifsxd.ksunext.R
 import com.rifsxd.ksunext.ui.component.rememberConfirmDialog
 import com.rifsxd.ksunext.ui.component.ConfirmResult
 import com.rifsxd.ksunext.ui.component.KeyEventBlocker
+import com.rifsxd.ksunext.ui.theme.ORANGE
+import com.rifsxd.ksunext.ui.theme.GREEN
+import com.rifsxd.ksunext.ui.theme.RED
 import com.rifsxd.ksunext.ui.util.FlashResult
 import com.rifsxd.ksunext.ui.util.LkmSelection
 import com.rifsxd.ksunext.ui.util.LocalSnackbarHost
@@ -79,9 +83,6 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
-import androidx.compose.ui.platform.LocalContext
-import android.app.Activity
 
 enum class FlashingStatus {
     FLASHING,
@@ -408,6 +409,11 @@ private fun TopBar(
                 ),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Black,
+                color = when (status) {
+                    FlashingStatus.FLASHING -> ORANGE
+                    FlashingStatus.SUCCESS -> GREEN
+                    FlashingStatus.FAILED -> RED
+                }
             )
         },
         navigationIcon = {

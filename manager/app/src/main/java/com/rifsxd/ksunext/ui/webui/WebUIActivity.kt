@@ -25,6 +25,10 @@ class WebUIActivity : ComponentActivity() {
 
     private var rootShell: Shell? = null
 
+    fun erudaConsole(context: android.content.Context): String {
+        return context.assets.open("eruda.min.js").bufferedReader().use { it.readText() }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
 
         // Enable edge to edge
@@ -46,7 +50,10 @@ class WebUIActivity : ComponentActivity() {
         }
 
         val prefs = getSharedPreferences("settings", MODE_PRIVATE)
-        WebView.setWebContentsDebuggingEnabled(prefs.getBoolean("enable_web_debugging", false))
+        val developerOptionsEnabled = prefs.getBoolean("enable_developer_options", false)
+        val enableWebDebugging = prefs.getBoolean("enable_web_debugging", false)
+
+        WebView.setWebContentsDebuggingEnabled(developerOptionsEnabled && enableWebDebugging)
 
         val moduleDir = "/data/adb/modules/${moduleId}"
         val webRoot = File("${moduleDir}/webroot")
@@ -84,7 +91,24 @@ class WebUIActivity : ComponentActivity() {
             settings.allowFileAccess = false
             webviewInterface = WebViewInterface(this@WebUIActivity, this, moduleDir)
             addJavascriptInterface(webviewInterface, "ksu")
-            setWebViewClient(webViewClient)
+            setWebViewClient(object : WebViewClient() {
+                override fun shouldInterceptRequest(
+                    view: WebView,
+                    request: WebResourceRequest
+                ): WebResourceResponse? {
+                    return webViewAssetLoader.shouldInterceptRequest(request.url)
+                }
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    if (developerOptionsEnabled && enableWebDebugging) {
+                        view?.evaluateJavascript(
+                            erudaConsole(this@WebUIActivity),
+                            null
+                        )
+                        view?.evaluateJavascript("eruda.init();", null)
+                    }
+                }
+            })
             loadUrl("https://mui.kernelsu.org/index.html")
         }
 

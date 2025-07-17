@@ -17,7 +17,7 @@
   <string name="home_working">Работает</string>
   <string name="home_working_version">Версия драйвера: %d</string>
   <string name="home_module_update_count">Обновлений: %d</string>
-  <string name="home_failure">Подпись KernelSU Next v2 не найдена в ядре!</string>
+  <string name="home_failure">Подпись KernelSU Next v2 не найдена в ядре! [ !KSU_NEXT || != size/hash ]</string>
   <string name="home_failure_tip">Напишите разработчику своего ядра, для интеграции KernelSU Next!</string>
   <string name="home_kernel">Версия ядра</string>
   <string name="hook_mode">Режим хуков</string>
@@ -45,8 +45,8 @@
   <string name="module_install_prompt_with_name">Следующие модули будут установлены: %1$s</string>
   <string name="module_sort_a_to_z">По имени (А → Я)</string>
   <string name="module_sort_z_to_a">По имени (Я → А)</string>
-  <string name="module_size_low_to_high">Сортировать (Меньше → Больше)</string>
-  <string name="module_size_high_to_low">Сортировать (Больше → Меньше)</string>
+  <string name="module_size_low_to_high">По размеру (Меньше → Больше)</string>
+  <string name="module_size_high_to_low">По размеру (Больше → Меньше)</string>
   <string name="uninstall">Удалить</string>
   <string name="restore">Восстановить</string>
   <string name="module_install">Установить</string>
@@ -94,8 +94,8 @@
   <string name="module_restore_message">Восстановить модули из последней резервной копии.</string>
   <string name="backup_restore">Бэкапы и восстановление</string>
   <string name="module_backup">Бэкап модулей</string>
-  <string name="allowlist_restore">Восстановить списка прав</string>
-  <string name="allowlist_restore_message">Восстановить список разрешений из последней резервной копии.</string>
+  <string name="allowlist_restore">Восстановить список прав</string>
+  <string name="allowlist_restore_message">Восстановить список прав из последней резервной копии.</string>
   <string name="allowlist_backup">Бэкап списка разрешений</string>
   <string name="allowlist_backup_message">Резервное копирование текущего списка разрешений.</string>
   <string name="warning">Предупреждение</string>
@@ -154,7 +154,7 @@
   <string name="su_not_allowed">Предоставление прав суперпользователя запрещено для: %s</string>
   <string name="module_changelog">Журнал изменений</string>
   <string name="settings_profile_template">Шаблон Профиля Приложений</string>
-  <string name="settings_profile_template_summary">Управление локальными и онлайн шаблонами Профилей Приложений</string>
+  <string name="settings_profile_template_summary">Управление локальными и онлайн шаблонами профилей приложений.</string>
   <string name="app_profile_template_create">Создать шаблон</string>
   <string name="app_profile_template_edit">Изменить шаблон</string>
   <string name="app_profile_template_id">ID</string>
@@ -176,7 +176,7 @@
   <string name="app_profile_template_import_empty">Буфер обмена пуст!</string>
   <string name="module_changelog_failed">Не удалось получить журнал изменений: %s</string>
   <string name="settings_check_update">Проверять обновления</string>
-  <string name="settings_check_update_summary">Автоматически проверять обновления при открытии приложения</string>
+  <string name="settings_check_update_summary">Автоматически проверять обновления при открытии приложения.</string>
   <string name="grant_root_failed">Не удалось выдать root!</string>
   <string name="action">Скрипт</string>
   <string name="webui">WebUI</string>
@@ -223,9 +223,12 @@
   <string name="sucompat_disabled">SUCOMPAT ОТКЛЮЧЕН</string>
   <string name="zygisk_required">Требуется Zygisk</string>
   <string name="zygisk_status">Инжект Zygisk</string>
-  <string name="home_superuser_count_singular">Выдано прав</string>
+  <string name="home_superuser_count_singular">Выдано право</string>
   <string name="home_superuser_count_plural">Выдано прав</string>
   <string name="home_module_count_singular">Модуль</string>
   <string name="home_module_count_plural">Модулей</string>
   <string name="module_backup_message">Резервное копирование текущих установленных модулей.</string>
+  <string name="module_sort_enabled_first">По статусу (Сначала включённые)</string>
+  <string name="module_sort_action_first">По статусу (Сначала со скриптом)</string>
+  <string name="module_sort_webui_first">По статусу (Сначала с WebUI)</string>
 </resources>

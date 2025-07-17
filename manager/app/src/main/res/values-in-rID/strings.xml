@@ -30,9 +30,9 @@
   <string name="home_susfs_version">Versi SuSFS</string>
   <string name="home_susfs_sus_su">SuS SU</string>
   <string name="home_android">Versi android</string>
-  <string name="home_manager_version">Versi manager</string>
+  <string name="home_manager_version">Versi manajer</string>
   <string name="home_abi">ABI</string>
-  <string name="home_selinux_status">Status SElinux</string>
+  <string name="home_selinux_status">Status SELinu</string>
   <string name="selinux_status_disabled">Nonaktif</string>
   <string name="selinux_status_enforcing">Enforcing</string>
   <string name="selinux_status_permissive">Permissive</string>
@@ -229,4 +229,7 @@
   <string name="home_module_count_singular">Modul</string>
   <string name="home_module_count_plural">Modul</string>
   <string name="module_backup_message">Cadangkan modul yang terinstal saat ini.</string>
+  <string name="module_sort_enabled_first">Urutkan (Diaktifkan lebih dulu)</string>
+  <string name="module_sort_action_first">Urutkan (Aksi lebih dulu)</string>
+  <string name="module_sort_webui_first">Urutkan (WebUI lebih dulu)</string>
 </resources>

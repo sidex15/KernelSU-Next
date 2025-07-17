@@ -622,12 +622,20 @@ private fun InfoCard(autoExpand: Boolean = false) {
                     icon = painterResource(R.drawable.ic_ksu_next),
                 )
 
-                if (Natives.version >= Natives.MINIMAL_SUPPORTED_HOOK_MODE) {
+                if (ksuVersion != null &&
+                    Natives.version >= Natives.MINIMAL_SUPPORTED_HOOK_MODE) {
+
+                    val hookMode =
+                        Natives.getHookMode()
+                            .takeUnless { it.isNullOrBlank() }
+                            ?: stringResource(R.string.unavailable)
+
                     Spacer(Modifier.height(16.dp))
+
                     InfoCardItem(
-                        label = stringResource(R.string.hook_mode),
-                        content = Natives.getHookMode() ?: stringResource(R.string.unavailable),
-                        icon = Icons.Filled.Phishing,
+                        label   = stringResource(R.string.hook_mode),
+                        content = hookMode,
+                        icon    = Icons.Filled.Phishing,
                     )
                 }
 
