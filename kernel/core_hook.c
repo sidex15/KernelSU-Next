@@ -695,7 +695,6 @@ int ksu_handle_prctl(int option, unsigned long arg2, unsigned long arg3,
 			return 0;
 		}
 		if (arg2 == CMD_SUSFS_RUN_UMOUNT_FOR_CURRENT_MNT_NS) {
-			int error = 0;
 			susfs_run_try_umount_for_current_mnt_ns();
 			pr_info("susfs: CMD_SUSFS_RUN_UMOUNT_FOR_CURRENT_MNT_NS -> ret: %d\n", susfs_cmd_err);
 		}
