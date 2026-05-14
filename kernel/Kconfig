@@ -44,8 +44,7 @@ config KSU_ALLOWLIST_WORKAROUND
 config KSU_MANUAL_HOOK
 	bool "KernelSU manual hook mode."
 	depends on KSU && KSU != m
-	default y if !KPROBES
-	default n
+	default y
 	help
 	  Enable manual hook support.
 
@@ -53,8 +52,7 @@ config KSU_KPROBES_HOOK
 	bool "KernelSU tracepoint+kretprobe hook"
 	depends on KSU && !KSU_MANUAL_HOOK
 	depends on KRETPROBES && KPROBES && HAVE_SYSCALL_TRACEPOINTS
-	default y if KPROBES && KRETPROBES && HAVE_SYSCALL_TRACEPOINTS
-	default y if !KSU_MANUAL_HOOK
+	default n
 	help
 	  Enable KPROBES, KRETPROBES and TRACEPOINT hook for KernelSU core.
 	  This should not be used on kernel below 5.10.
