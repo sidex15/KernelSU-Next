@@ -193,7 +193,7 @@ void ksu_sel_write_context(struct file **file, char **buf, size_t *size)
 	return;
 }
 
-#if defined(CONFIG_KPROBES)
+#ifdef CONFIG_KSU_KPROBES_HOOK
 
 #include <linux/kprobes.h>
 static struct kprobe *slow_avc_audit_kp;
@@ -240,7 +240,7 @@ static void destroy_kprobe(struct kprobe **kp_ptr)
 	kfree(kp);
 	*kp_ptr = NULL;
 }
-#endif // CONFIG_KPROBES
+#endif // CONFIG_KSU_KPROBES_HOOK
 
 
 static void ksu_selinux_hide_enable() 
@@ -249,7 +249,7 @@ static void ksu_selinux_hide_enable()
 	if (ret)
 		pr_info("selinux_hide: sid grab fail?\n");
 
-#if defined(CONFIG_KPROBES)
+#ifdef CONFIG_KSU_KPROBES_HOOK
 	slow_avc_audit_kp = init_kprobe("slow_avc_audit", slow_avc_audit_pre_handler);
 #endif
 
@@ -258,7 +258,7 @@ static void ksu_selinux_hide_enable()
 
 static void ksu_selinux_hide_disable()
 {
-#if defined(CONFIG_KPROBES)
+#ifdef CONFIG_KSU_KPROBES_HOOK
 	pr_info("selinux_hide: unregister slow_avc_audit kprobe!\n");
 	destroy_kprobe(&slow_avc_audit_kp);
 #endif
