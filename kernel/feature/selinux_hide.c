@@ -517,13 +517,14 @@ init_hooks:
 	const char *init_adb_args[] = { "init", "adb_data_file", NULL };
 	ksu_add_shit_to_list(KSU_SEPOLICY_CMD_NORMAL_PERM, init_adb_args);
 
-    const char *kernel_adb_args[] = { "kernel", "adb_data_file", NULL };
-	ksu_add_shit_to_list(KSU_SEPOLICY_CMD_NORMAL_PERM, kernel_adb_args);
+	const char *adbroot_args[] = { "adbroot", "domain" };
+	ksu_add_shit_to_list(KSU_SEPOLICY_CMD_TYPE, adbroot_args);
 
+	const char *fsck_sys_admin_args[] = { "fsck_untrusted", "fsck_untrusted", "capability", "sys_admin" };
+	ksu_add_shit_to_list(KSU_SEPOLICY_CMD_XPERM, fsck_sys_admin_args);
 
-	// we move this to a module instead
-	// const char *adbroot_args[] = { "adbroot", NULL };
-	// ksu_add_shit_to_list(KSU_SEPOLICY_CMD_TYPE, adbroot_args);
+	const char *shell_su_args[] = { "shell", "su", "process", "transition" };
+	ksu_add_shit_to_list(KSU_SEPOLICY_CMD_TYPE_TRANSITION, shell_su_args);
 
 	ksu_selinux_hide_enable();
 	ksu_init_hook_selinux_transaction_write();
