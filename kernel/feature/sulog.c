@@ -1,5 +1,7 @@
 #include <linux/cache.h>
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0)
 #include <linux/compiler_types.h>
+#endif
 
 #include "feature/sulog.h"
 #include "klog.h" // IWYU pragma: keep
