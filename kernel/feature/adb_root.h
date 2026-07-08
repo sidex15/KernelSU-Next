@@ -1,7 +1,6 @@
 #ifndef __KSU_H_ADB_ROOT
 #define __KSU_H_ADB_ROOT
 #include <asm/ptrace.h>
-#include "runtime/user_arg_ptr.h"
 
 long ksu_adb_root_handle_execve(const char *filename, struct user_arg_ptr *envp_p);
 
