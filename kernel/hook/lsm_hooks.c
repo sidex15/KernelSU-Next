@@ -10,6 +10,7 @@
 #include "compat/kernel_compat.h"
 #include "setuid_hook.h"
 #include "manager/throne_tracker.h"
+#include "ksu.h"
 
 #ifndef KSU_KPROBES_HOOK
 
@@ -29,6 +30,15 @@ static int ksu_key_permission(key_ref_t key_ref, const struct cred *cred,
 	}
 	init_session_keyring = cred->session_keyring;
 	pr_info("kernel_compat: got init_session_keyring\n");
+
+	// ksu_cred is prepare_creds()'d at driver init with no session keyring
+	// of its own, which makes privileged file ops done under it (e.g. the
+	// allowlist save in do_persistent_allow_list) fail with -ENOKEY. Give
+	// it init's, the same way a normal kernel thread would inherit one.
+	if (ksu_cred && init_session_keyring) {
+		key_get(init_session_keyring);
+		rcu_assign_pointer(ksu_cred->session_keyring, init_session_keyring);
+	}
 	return 0;
 }
 #endif
