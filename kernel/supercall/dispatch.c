@@ -10,8 +10,13 @@
 #include "objsec.h"
 #endif // #ifdef CONFIG_KSU_SUSFS
 #include <linux/thread_info.h>
+#include <linux/sched.h>
+#if __has_include(<linux/sched/task.h>)
 #include <linux/sched/task.h>
+#endif
+#if __has_include(<linux/sched/signal.h>)
 #include <linux/sched/signal.h>
+#endif
 #include "uapi/supercall.h"
 #include "supercall/internal.h"
 #include "arch.h" // IWYU pragma: keep
@@ -803,6 +808,15 @@ static int do_set_init_pgrp(void __user *arg)
 	write_lock_irq(&tasklist_lock);
 
 	p = current->group_leader;
+#ifdef KSU_COMPAT_HAS_TASK_PGRP_FUNC
+	init_group = task_pgrp(&init_task);
+
+	if (task_session(p) != task_session(&init_task))
+		goto out;
+
+	err = 0;
+	if (task_pgrp(p) != init_group) {
+#else
 	init_group = init_task.signal->pids[PIDTYPE_PGID];
 
 	if (p->signal->pids[PIDTYPE_SID] != init_task.signal->pids[PIDTYPE_SID])
@@ -810,6 +824,7 @@ static int do_set_init_pgrp(void __user *arg)
 
 	err = 0;
 	if (p->signal->pids[PIDTYPE_PGID] != init_group) {
+#endif
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(6, 15, 0)
         change_pid(pids, p, PIDTYPE_PGID, init_group);
 #else
