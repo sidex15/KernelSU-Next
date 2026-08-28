@@ -231,7 +231,7 @@ int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
 	return 0;
 }
 
-/*int __ksu_handle_devpts(struct inode *inode)
+int __ksu_handle_devpts(struct inode *inode)
 {
 #ifndef KSU_KPROBES_HOOK
 	if (!ksu_su_compat_enabled)
@@ -258,11 +258,10 @@ int ksu_handle_execveat_sucompat(int *fd, struct filename **filename_ptr,
 	return 0;
 }
 
-// dead code: devpts handling
 int __maybe_unused ksu_handle_devpts(struct inode *inode)
 {
 	return __ksu_handle_devpts(inode);
-}*/
+}
 
 // sucompat: permitted process can execute 'su' to gain root access.
 void __init ksu_sucompat_init()
