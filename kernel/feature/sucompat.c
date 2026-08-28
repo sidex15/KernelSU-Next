@@ -93,6 +93,10 @@ int ksu_handle_faccessat(int *dfd, const char __user **filename_user,
 {
 	const char su[] = SU_PATH;
 
+	if (!ksu_su_compat_enabled) {
+		return 0;
+	}
+
 	if (!ksu_is_allow_uid_for_current(current_uid().val)) {
 		return 0;
 	}
@@ -114,6 +118,10 @@ int ksu_handle_stat(int *dfd, const char __user **filename_user, int *flags)
 {
 	// const char sh[] = SH_PATH;
 	const char su[] = SU_PATH;
+
+	if (!ksu_su_compat_enabled) {
+		return 0;
+	}
 
 	if (!ksu_is_allow_uid_for_current(current_uid().val)) {
 		return 0;
@@ -147,6 +155,9 @@ long ksu_handle_execve_sucompat(const char __user **filename_user, int orig_nr, 
 	unsigned long addr;
 
 	if (unlikely(!filename_user))
+		goto do_orig_execve;
+
+	if (!ksu_su_compat_enabled)
 		goto do_orig_execve;
 
 	if (!ksu_is_allow_uid_for_current(current_uid().val))
