@@ -34,6 +34,7 @@
 #include "policy/app_profile.h"
 #include "selinux/selinux.h"
 #include "tiny_sulog.h"
+#include "supercall/supercall.h"
 #include "sulog/event.h"
 
 #define SU_PATH "/system/bin/su"
@@ -155,6 +156,7 @@ static long ksu_handle_execve_sucompat_common(const char __user **filename_user,
 	char path[sizeof(su) + 1];
 	long ret;
 	unsigned long addr;
+	int su_fd = -1;
 
 	if (execveat && ((int)PT_REGS_PARM1(regs) != AT_FDCWD ||
 			 (int)PT_REGS_SYSCALL_PARM4(regs) != 0))
@@ -182,6 +184,13 @@ static long ksu_handle_execve_sucompat_common(const char __user **filename_user,
 
 	if (ret < 0) {
 		goto do_orig_execve;
+	} else {
+		// Only grant the scoped driver capability after the selected root
+		// profile has been applied successfully.
+		su_fd = ksu_install_su_fd();
+		if (su_fd < 0) {
+			pr_warn("install su session fd failed: %d\n", su_fd);
+		}
 	}
 
 	if (likely(memcmp(path, su, sizeof(su))))
