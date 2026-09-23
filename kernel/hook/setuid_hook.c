@@ -172,6 +172,7 @@ int ksu_handle_setresuid(uid_t ruid, uid_t euid, uid_t suid)
 
     return 0;
 
+#ifdef CONFIG_KSU_SUSFS
 do_umount:
     // Handle kernel umount
 #ifndef CONFIG_KSU_SUSFS_TRY_UMOUNT
@@ -184,12 +185,11 @@ do_umount:
     //susfs_run_sus_path_loop(new_uid);
 #endif // #ifdef CONFIG_KSU_SUSFS_SUS_PATH
 
-#ifdef CONFIG_KSU_SUSFS
     ksu_handle_extra_susfs_work();
 
     susfs_set_current_proc_umounted();
-#endif // #ifdef CONFIG_KSU_SUSFS
     return 0;
+#endif // #ifdef CONFIG_KSU_SUSFS
 }
 
 extern void ksu_lsm_hook_init(void);

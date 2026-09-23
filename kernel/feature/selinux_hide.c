@@ -193,7 +193,7 @@ void ksu_sel_write_context(struct file **file, char **buf, size_t *size)
 	return;
 }
 
-#if defined(CONFIG_KPROBES)
+#if defined(CONFIG_KSU_KPROBES_HOOK)
 
 #include <linux/kprobes.h>
 static struct kprobe *slow_avc_audit_kp;
@@ -240,7 +240,7 @@ static void destroy_kprobe(struct kprobe **kp_ptr)
 	kfree(kp);
 	*kp_ptr = NULL;
 }
-#endif // CONFIG_KPROBES
+#endif // CONFIG_KSU_KPROBES_HOOK
 
 
 static void ksu_selinux_hide_enable() 
@@ -249,7 +249,7 @@ static void ksu_selinux_hide_enable()
 	if (ret)
 		pr_info("selinux_hide: sid grab fail?\n");
 
-#if defined(CONFIG_KPROBES)
+#if defined(CONFIG_KSU_KPROBES_HOOK)
 	slow_avc_audit_kp = init_kprobe("slow_avc_audit", slow_avc_audit_pre_handler);
 #endif
 
@@ -258,7 +258,7 @@ static void ksu_selinux_hide_enable()
 
 static void ksu_selinux_hide_disable()
 {
-#if defined(CONFIG_KPROBES)
+#if defined(CONFIG_KSU_KPROBES_HOOK)
 	pr_info("selinux_hide: unregister slow_avc_audit kprobe!\n");
 	destroy_kprobe(&slow_avc_audit_kp);
 #endif
@@ -489,13 +489,16 @@ bail_out:
 	path_put(&path);
 }
 
+#ifndef KSU_KPROBES_HOOK
 extern bool ksu_input_hook __read_mostly;
+#endif
 
 // init kthread
 static int ksu_hide_init_thread(void *data)
 {
 	set_user_nice(current, 19); // low prio
 
+#ifndef KSU_KPROBES_HOOK
 wait_start:
 	// in input hook got turned off means we have ksud!
 	if (!*(volatile bool *)&ksu_input_hook)
@@ -507,6 +510,7 @@ wait_start:
 
 init_hooks:
 	;
+#endif
 	// apply_kernelsu_rules_fn
 	const char *ksu_domain_args[] = { KERNEL_SU_DOMAIN, NULL };
 	ksu_add_shit_to_list(KSU_SEPOLICY_CMD_TYPE, ksu_domain_args);
